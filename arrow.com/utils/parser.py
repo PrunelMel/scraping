@@ -3,14 +3,13 @@ import requests
 def requestHandler(url:str)->dict:
     
     try:
-        response = requests.get(url)
+        response = requests.get(url, timeout=10)
 
-        if response.status_code == 200:
-            return {"status_code":response.status_code, "data":response.json()}
-        else:
-            return {"status_code":response.status_code, "message":""}
-    
-    except Exception as e:
+        response.raise_for_status()        
+        
+        return {"data":response.json()}
+        
+    except requests.exceptions.RequestException as e:
 
         return {"error":e}
     
